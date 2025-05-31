@@ -13,8 +13,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - uses: actions/upload-artifact@v4
-        name: package
         with:
+          name: package
           path: |
             dist
             package.json
