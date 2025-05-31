@@ -1,7 +1,7 @@
 /**
  * A single filter element like 'fieldname:term'.
  */
-class Filter {
+export class Filter {
     /**
      * @param {string|null} field The filter field (or null to match any field)
      * @param {string} term The term value for this filter
@@ -122,7 +122,7 @@ class Filter {
  * A group of multiple filter items combined using OR or AND, like 'fieldname:term anotherfield:anotherterm'.
  * Each filter item might be a simple filter item or another filter group.
  */
-class FilterGroup {
+export class FilterGroup {
     /**
      * @type {FilterGroup|Filter}
      */
@@ -261,7 +261,7 @@ class FilterGroup {
     }
 }
 
-class SearchQueryParser {
+export class SearchQueryParser {
     constructor(query) {
         this.rootGroup = SearchQueryParser.parseQuery(query);
     }
