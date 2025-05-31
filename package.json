@@ -1,0 +1,22 @@
+{
+  "name": "@programie/searchqueryparser",
+  "version": "1.0.0",
+  "description": "A simple parser for search query strings",
+  "license": "MIT",
+  "author": {
+    "name": "Programie",
+    "email": "git@selfcoders.com"
+  },
+  "keywords": [
+    "search",
+    "query",
+    "parser"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Programie/SearchQueryParser-js"
+  },
+  "bugs": {
+    "url": "https://github.com/Programie/SearchQueryParser-js/issues"
+  }
+}
