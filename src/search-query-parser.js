@@ -262,8 +262,12 @@ export class FilterGroup {
 }
 
 export class SearchQueryParser {
-    constructor(query) {
-        this.rootGroup = SearchQueryParser.parseQuery(query);
+    constructor(query = null) {
+        if (query === null) {
+            this.rootGroup = new FilterGroup();
+        } else {
+            this.rootGroup = SearchQueryParser.parseQuery(query);
+        }
     }
 
     /**
@@ -348,8 +352,8 @@ export class SearchQueryParser {
      * @returns {FilterGroup,number} An array containing the FilterGroup and length of the tokens
      */
     static parseTokens(tokens, start = 0) {
-        let group = new FilterGroup("AND");
-        let currentMode = "AND";
+        let group = new FilterGroup();
+        let currentMode = group.mode;
 
         for (let i = start; i < tokens.length; i++) {
             const token = tokens[i];
