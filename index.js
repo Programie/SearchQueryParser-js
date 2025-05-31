@@ -1,3 +1,3 @@
-export {Filter} from "src/Filter";
-export {FilterGroup} from "src/FilterGroup";
-export {SearchQueryParser} from "src/SearchQueryParser";
+export {Filter} from "./src/Filter.js";
+export {FilterGroup} from "./src/FilterGroup.js";
+export {SearchQueryParser} from "./src/SearchQueryParser.js";

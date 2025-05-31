@@ -1,4 +1,4 @@
-import Filter from "./Filter";
+import { Filter } from "./Filter.js";
 
 /**
  * A group of multiple filter items combined using OR or AND, like 'fieldname:term anotherfield:anotherterm'.

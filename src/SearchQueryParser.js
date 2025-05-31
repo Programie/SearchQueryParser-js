@@ -1,5 +1,5 @@
-import Filter from "./Filter";
-import FilterGroup from "./FilterGroup";
+import { Filter } from "./Filter.js";
+import { FilterGroup } from "./FilterGroup.js";
 
 export class SearchQueryParser {
     constructor(query = null) {
