@@ -37,6 +37,8 @@ jobs:
         with:
           name: package
       - uses: volta-cli/action@v4
+        with:
+          registry-url: https://registry.npmjs.org
       - id: extract-release-notes
         uses: ffurrer2/extract-release-notes@v2
       - uses: softprops/action-gh-release@v2
