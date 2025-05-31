@@ -12,8 +12,6 @@ jobs:
       - uses: volta-cli/action@v4
       - run: npm ci
       - run: npm run build
-      - id: extract-release-notes
-        uses: ffurrer2/extract-release-notes@v2
       - uses: actions/upload-artifact@v4
         with:
           path: |
@@ -27,7 +25,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    if: startsWith(github.ref, 'refs/tags/')
+    # if: startsWith(github.ref, 'refs/tags/')
     needs: build
 
     steps:
@@ -35,9 +33,9 @@ jobs:
       - uses: volta-cli/action@v4
       - id: extract-release-notes
         uses: ffurrer2/extract-release-notes@v2
-      - uses: softprops/action-gh-release@v2
-        with:
-          body: ${{ steps.extract-release-notes.outputs.release_notes }}
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #- uses: softprops/action-gh-release@v2
+      #  with:
+      #    body: ${{ steps.extract-release-notes.outputs.release_notes }}
+      #- run: npm publish
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
