@@ -2,7 +2,9 @@ import { Filter } from "./Filter.js";
 import { FilterGroup } from "./FilterGroup.js";
 
 export class SearchQueryParser {
-    constructor(query = null) {
+    rootGroup: FilterGroup;
+
+    constructor(query: string | null = null) {
         if (query === null) {
             this.rootGroup = new FilterGroup();
         } else {
@@ -12,18 +14,18 @@ export class SearchQueryParser {
 
     /**
      * Check whether this search query parser has at least one filter.
-     * @returns {bool} True if there is at least one filter, false otherwise
+     * @returns True if there is at least one filter, false otherwise
      */
-    hasQuery() {
-        return this.rootGroup.include.length || this.rootGroup.exclude.length;
+    hasQuery(): boolean {
+        return this.rootGroup.include.length > 0 || this.rootGroup.exclude.length > 0;
     }
 
     /**
      * Check whether the parsed query matches the given entry.
-     * @param {object} entry The netry to check
-     * @returns {bool} True if the query matches the given entry, false otherwise
+     * @param entry The netry to check
+     * @returns True if the query matches the given entry, false otherwise
      */
-    matchesEntry(entry) {
+    matchesEntry(entry: Record<string, string>): boolean {
         return this.rootGroup.matchesEntry(entry);
     }
 
@@ -31,17 +33,17 @@ export class SearchQueryParser {
      * Turn this search query back to a string which can be parsed again.
      * @returns {string} The parseable string
      */
-    toString() {
+    toString(): string {
         return this.rootGroup.toString();
     }
 
     /**
      * Parse the given query.
      * @private
-     * @param {string} query The query string to parse
-     * @returns {FilterGroup} A new FilterGroup with the parsed filters
+     * @param query The query string to parse
+     * @returns A new FilterGroup with the parsed filters
      */
-    static parseQuery(query) {
+    static parseQuery(query: string): FilterGroup {
         const tokens = SearchQueryParser.tokenize(query);
         const [group] = SearchQueryParser.parseTokens(tokens);
         return group;
@@ -50,10 +52,10 @@ export class SearchQueryParser {
     /**
      * Tokenize the given query string.
      * @private
-     * @param {string} query The query string to parse
-     * @returns {list[string]} A list of parsed token
+     * @param query The query string to parse
+     * @returns A list of parsed token
      */
-    static tokenize(query) {
+    static tokenize(query: string): Array<string> {
         const tokens = [];
         let buffer = "";
         let inQuotes = false;
@@ -87,11 +89,11 @@ export class SearchQueryParser {
     /**
      * Parse the given tokens (returned by tokenize()) into a new FilterGroup instance.
      * @private
-     * @param {list[string]} tokens The tokens to parse
-     * @param {number} start The offset where to start
-     * @returns {FilterGroup,number} An array containing the FilterGroup and length of the tokens
+     * @param tokens The tokens to parse
+     * @param start The offset where to start
+     * @returns An array containing the FilterGroup and length of the tokens
      */
-    static parseTokens(tokens, start = 0) {
+    static parseTokens(tokens: Array<string>, start: number = 0): [FilterGroup, number] {
         let group = new FilterGroup();
         let currentMode = group.mode;
 

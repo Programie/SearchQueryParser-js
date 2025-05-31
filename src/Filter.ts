@@ -2,12 +2,16 @@
  * A single filter element like 'fieldname:term'.
  */
 export class Filter {
+    field: string | null;
+    term: string;
+    operator: string;
+
     /**
-     * @param {string|null} field The filter field (or null to match any field)
-     * @param {string} term The term value for this filter
-     * @param {string} operator The operator for this filter (':' for contains, '=' for exact match)
+     * @param field The filter field (or null to match any field)
+     * @param term The term value for this filter
+     * @param operator The operator for this filter (':' for contains, '=' for exact match)
      */
-    constructor(field, term, operator) {
+    constructor(field: string | null, term: string, operator: string) {
         this.field = field;
         this.term = term;
         this.operator = operator;
@@ -15,10 +19,10 @@ export class Filter {
 
     /**
      * Parse a simple filter string like 'fieldname:term'.
-     * @param {string} term The filter string to parse
-     * @returns {Filter} A new Filter instance containing the parsed data
+     * @param term The filter string to parse
+     * @returns A new Filter instance containing the parsed data
      */
-    static parse(term) {
+    static parse(term: string): Filter {
         let field = null;
         let operator = ":";// default: partial match
 
@@ -36,10 +40,10 @@ export class Filter {
 
     /**
      * Check whether this filter is equal to another filter.
-     * @param {Filter} otherFilter The other filter to compare
-     * @returns {bool} True if both filters are the same, false otherwise
+     * @param otherFilter The other filter to compare
+     * @returns True if both filters are the same, false otherwise
      */
-    equals(otherFilter) {
+    equals(otherFilter: Filter): boolean {
         return this.field === otherFilter.field
             && this.term === otherFilter.term
             && this.operator === otherFilter.operator;
@@ -47,9 +51,9 @@ export class Filter {
 
     /**
      * Turn this filter back to a string which can be parsed again.
-     * @returns {string} The parseable string
+     * @returns The parseable string
      */
-    toString() {
+    toString(): string {
         let string = [];
 
         if (this.field !== null) {
@@ -68,10 +72,10 @@ export class Filter {
 
     /**
      * Check whether the given field value contains or equals this filter (depending on the operator of this filter).
-     * @param {string} value The value to use for the match
-     * @returns {bool} True if the field matches, false otherwise
+     * @param value The value to use for the match
+     * @returns True if the field matches, false otherwise
      */
-    matchField(value) {
+    matchField(value: string): boolean {
         value = value.toLowerCase();
         let term = this.term.toLowerCase();
 
@@ -80,29 +84,29 @@ export class Filter {
 
     /**
      * Check whether the given entry matches this filter.
-     * @param {object} entry The entry to check
-     * @returns {bool} True if the entry matches, false otherwise
+     * @param entry The entry to check
+     * @returns True if the entry matches, false otherwise
      */
-    matchEntry(entry) {
+    matchEntry(entry: Record<string, string>): boolean {
         const values = this.getFields(entry);
-        return values.some(value => this.matchField(value));
+        return values.some((value: string) => this.matchField(value));
     }
 
     /**
      * Get a list of fields from the given entry.
-     * @param {object} entry The entry to use
-     * @returns {list} A list of field values
+     * @param entry The entry to use
+     * @returns A list of field values
      */
-    getFields(entry) {
+    getFields(entry: Record<string, string>): Array<string> {
         if (!this.field) {
             return Object.values(entry)
-                .flatMap(value =>
+                .flatMap((value: string | Array<string>) =>
                     typeof value === "string" ? [value] :
-                    Array.isArray(value) ? value.filter(v => typeof v === "string") :
-                    []
+                        Array.isArray(value) ? value.filter(v => typeof v === "string") :
+                            []
                 )
                 .filter(Boolean)
-                .map(s => s.toLowerCase());
+                .map((string: string) => string.toLowerCase());
         }
 
         const value = entry[this.field.toLowerCase()];

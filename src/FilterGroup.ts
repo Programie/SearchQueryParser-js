@@ -5,23 +5,14 @@ import { Filter } from "./Filter.js";
  * Each filter item might be a simple filter item or another filter group.
  */
 export class FilterGroup {
-    /**
-     * @type {FilterGroup|Filter}
-     */
-    include;
-    /**
-     * @type {FilterGroup|Filter}
-     */
-    exclude;
-    /**
-     * @type {string}
-     */
-    mode;
+    include: Array<FilterGroup | Filter>;
+    exclude: Array<FilterGroup | Filter>;
+    mode: string;
 
     /**
-     * @param {string} mode The mode to use (OR or AND)
+     * @param mode The mode to use (OR or AND)
      */
-    constructor(mode = "AND") {
+    constructor(mode: string = "AND") {
         this.include = [];
         this.exclude = [];
         this.mode = mode;// "OR" or "AND"
@@ -29,20 +20,20 @@ export class FilterGroup {
 
     /**
      * Add a filter or filter group to this filter group.
-     * @param {Filter|FilterGroup} filterOrGroup The Filter or FilterGroup instance to add
-     * @param {bool} isExclude True to add it to the exclude list, false to add it to the include list
+     * @param filterOrGroup The Filter or FilterGroup instance to add
+     * @param isExclude True to add it to the exclude list, false to add it to the include list
      */
-    add(filterOrGroup, isExclude = false) {
+    add(filterOrGroup: Filter | FilterGroup, isExclude: boolean = false) {
         (isExclude ? this.exclude : this.include).push(filterOrGroup);
     }
 
     /**
      * Add a filter or filter group to this filter group and make sure this filter group has the correct mode ("OR" or "AND").
-     * @param {Filter|FilterGroup} filterOrGroup The Filter or FilterGroup instance to add
-     * @param {string} mode The mode to use ("OR" or "AND")
-     * @param {bool} isExclude True to add it to the exclude list, false to add it to the include list
+     * @param filterOrGroup The Filter or FilterGroup instance to add
+     * @param mode The mode to use ("OR" or "AND")
+     * @param isExclude True to add it to the exclude list, false to add it to the include list
      */
-    addWithMode(filterOrGroup, mode, isExclude = false) {
+    addWithMode(filterOrGroup: Filter | FilterGroup, mode: string, isExclude: boolean = false) {
         if (!isExclude && this.mode !== mode) {
             // Move existing filters to sub group
             let subgroup = new FilterGroup(this.mode);
@@ -57,10 +48,10 @@ export class FilterGroup {
 
     /**
      * Remove the specified filter from this filter group.
-     * @param {Filter} filter The filter to remove
-     * @param {bool} isExclude True to remove it from the exclude list, false to remove it from the include list
+     * @param filter The filter to remove
+     * @param isExclude True to remove it from the exclude list, false to remove it from the include list
      */
-    remove(filter, isExclude = false) {
+    remove(filter: Filter, isExclude: boolean = false) {
         let list = isExclude ? this.exclude : this.include;
 
         list = list.filter((item) => {
@@ -80,11 +71,11 @@ export class FilterGroup {
 
     /**
      * Check whether any of this filter group's filters matches the given entry.
-     * @param {object} entry The entry to match against this group's filters
-     * @returns {bool} True if the entry matches all filters, false otherwise
+     * @param entry The entry to match against this group's filters
+     * @returns True if the entry matches all filters, false otherwise
      */
-    matchesEntry(entry) {
-        const match = (item) =>
+    matchesEntry(entry: Record<string, string>): boolean {
+        const match = (item: Filter | FilterGroup) =>
             item instanceof FilterGroup
                 ? item.matchesEntry(entry)
                 : item.matchEntry(entry);
@@ -102,12 +93,12 @@ export class FilterGroup {
 
     /**
      * Check whether this filter group has at least one matching filter.
-     * @param {Filter} filter The filter to check (comparing field, term and operator)
-     * @param {bool} isExclude true if the filter should be searched in the exclude list, false if the filter should be search in the include list
-     * @param {bool} nestedEntries true to recursively search all filter groups instead of just this one
-     * @returns {bool} True if the given filter has been found, false otherwise
+     * @param filter The filter to check (comparing field, term and operator)
+     * @param isExclude true if the filter should be searched in the exclude list, false if the filter should be search in the include list
+     * @param nestedEntries true to recursively search all filter groups instead of just this one
+     * @returns True if the given filter has been found, false otherwise
      */
-    hasFilter(filter, isExclude = false, nestedEntries = false) {
+    hasFilter(filter: Filter, isExclude: boolean = false, nestedEntries: boolean = false): boolean {
         let list = isExclude ? this.exclude : this.include;
 
         return list.find((item) => {
@@ -123,10 +114,10 @@ export class FilterGroup {
 
     /**
      * Turn this filter group back to a string which can be parsed again.
-     * @returns {string} The parseable string
+     * @returns The parseable string
      */
-    toString() {
-        const itemMapper = (item, itemList) => {
+    toString(): string {
+        const itemMapper = (item: Filter | FilterGroup, itemList: Array<FilterGroup | Filter>) => {
             if (item instanceof FilterGroup && itemList.length > 1) {
                 return `(${item.toString()})`;
             } else {

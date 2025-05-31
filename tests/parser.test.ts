@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { SearchQueryParser } from "../index.js";
+import { SearchQueryParser } from "../src/index";
 
 describe("Parse query", () => {
     it("Simple AND", () => {
