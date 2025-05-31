@@ -30,6 +30,7 @@ jobs:
 
     steps:
       - uses: actions/download-artifact@v4
+      - run: ls -laR
       - uses: volta-cli/action@v4
       - id: extract-release-notes
         uses: ffurrer2/extract-release-notes@v2
